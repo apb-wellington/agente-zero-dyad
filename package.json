@@ -1,0 +1,10 @@
+{
+  "name": "agente-zero-dyad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Repositório doc-as-code do Agente Zero. Não é um app — é um sistema de prompts e artefatos de descoberta de produto conduzido dentro do Dyad. Este package.json existe apenas para satisfazer a expectativa do Dyad de importar um projeto Node.js executável.",
+  "scripts": {
+    "dev": "echo \"[Agente Zero] Este repositório é doc-as-code, não um app. O script 'dev' existe apenas para satisfazer o import do Dyad e não faz nada.\" && sleep 999999"
+  },
+  "license": "UNLICENSED"
+}
