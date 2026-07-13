@@ -1,6 +1,6 @@
 # Card 01 — Product Vision
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** Nenhum
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: página completa — visão + público-alvo + diferencial + métricas de sucesso macro + contexto de mercado/concorrência + riscos estratégicos ligados à visão.
@@ -27,7 +27,7 @@ Use o contexto essencial fornecido abaixo para estruturar o documento. O resulta
 - Proposta de valor: Checkout e vitrine PWA ultra-simples para sellers eventuais venderem nas redes sociais sem a complexidade de e-commerce tradicional e sem a barganha do WhatsApp.
 - Filosofia "Fusca": Simplicidade radical, robustez, modularidade extrema.
 - Modelo BYOK (Bring Your Own Key): O usuário traz suas próprias chaves de API (Stripe, Google Sheets, OpenAI/Anthropic).
-- Armazenamento Zero: Nenhum dado de comprador é salvo nos servidores do CapybaraCart. Os dados de vendas vão direto para o Google Sheets do seller.
+- Armazenamento Zero: Nenhum dado de comprador é saved nos servidores do CapybaraCart. Os dados de vendas vão direto para o Google Sheets do seller.
 - Público-alvo: Colecionadores, hobbistas e vendedores eventuais que usam Instagram, Pinterest e TikTok.
 
 ### Instruções de Formato e Conteúdo:
@@ -60,4 +60,3 @@ Gere um texto fluido, maduro e sem clichês corporativos vazios. Foque na clarez
 2. O documento reflete com precisão a "Filosofia Fusca", o modelo BYOK e a política de armazenamento zero de dados.
 3. O tom do documento é estratégico, profissional e focado no público de hobbistas/colecionadores.
 4. Não há placeholders ou seções incompletas.
-# Card 01 — Product Vision
