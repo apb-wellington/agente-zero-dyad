@@ -1,6 +1,6 @@
 # Card 04 — Solution Architecture
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 02-prd
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: diagrama de componentes de alto nível + descrição textual + fluxo de dados entre componentes, decisões de escala/performance e pontos de falha considerados.
