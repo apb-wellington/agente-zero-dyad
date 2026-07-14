@@ -1,6 +1,6 @@
 # Card 05 — ADRs (Architecture Decision Records)
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 04-solution-architecture
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: ADR completo (contexto, decisão, alternativas consideradas, consequências) para cada decisão arquitetural relevante.
@@ -11,7 +11,7 @@ Registrar formalmente as decisões arquiteturais mais críticas do CapybaraCart,
 ## Contexto essencial
 *   **Modelo BYOK:** O seller traz suas próprias chaves de API. Precisamos decidir onde e como armazenar essas chaves com segurança máxima sem um banco de dados centralizado.
 *   **Armazenamento Zero:** Nenhum dado de comprador é retido nos servidores da plataforma. Precisamos formalizar como os dados de transação fluem diretamente para o Google Sheets do seller.
-*   **Serverless Proxy vs. Client-side Direto:** Decidir se as chamadas de API (Stripe, OpenAI, Google Sheets) serão feitas diretamente pelo navegador do comprador/seller ou se passarão por um proxy serverless leve para evitar problemas de CORS e proteger chaves em trânsito.
+*   **Serverless Proxy vs. Client-side Direto:** Decidir se as chamadas de API (Stripe, Google Sheets, OpenAI) serão feitas diretamente pelo navegador do comprador/seller ou se passarão por um proxy serverless leve para evitar problemas de CORS e proteger chaves em trânsito.
 
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
