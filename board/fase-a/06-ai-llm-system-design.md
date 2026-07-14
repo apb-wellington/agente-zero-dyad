@@ -1,6 +1,6 @@
 # Card 06 — AI/LLM System Design Doc
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 02-prd, 04-solution-architecture
 **Tier do projeto:** T3 Robusto (Profundidade: Criticidade 1)
 **Profundidade definida:** Criticidade 1: descrição do papel do LLM no produto + failure modes básicos esperados.
