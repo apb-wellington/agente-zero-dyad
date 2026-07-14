@@ -20,7 +20,7 @@ O fluxo de segurança funcionará da seguinte forma:
 2. O sistema utiliza a função de derivação de chave **PBKDF2** (Password-Based Key Derivation Function 2) com um salt aleatório e um alto número de iterações para derivar uma chave criptográfica a partir da Senha Mestre.
 3. As chaves de API inseridas pelo vendedor são criptografadas localmente no navegador usando a chave derivada e o algoritmo AES-GCM-256.
 4. O payload criptografado (contendo o texto cifrado, o vetor de inicialização/IV e o salt) é salvo no `localStorage` do navegador.
-5. A Senha Mestre e a chave derivada **nunca** são salvas de forma persistente. Elas residem apenas na memória volátil (RAM) do aplicativo durante a sessão activa do vendedor.
+5. A Senha Mestre e a chave derivada **nunca** são salvas de forma persistente. Elas residem apenas na memória volátil (RAM) do aplicativo durante a sessão ativa do vendedor.
 6. Para realizar operações que exigem as chaves, o vendedor "desbloqueia" sua sessão digitando a Senha Mestre, permitindo a descriptografia em memória para uso imediato.
 
 ### Alternativas Consideradas
@@ -38,35 +38,38 @@ O fluxo de segurança funcionará da seguinte forma:
 
 ---
 
-## ADR-02: Uso de Banco de Dados Local (SQLite/IndexedDB) para Estado e Catálogo do Seller
+## ADR-02: Fluxo de Dados de Compradores (Armazenamento Zero)
 
 ### Status
 Aprovado
 
 ### Contexto
-Para garantir a "Filosofia Fusca" de robustez, funcionamento offline e independência de servidores centrais, o aplicativo do vendedor precisa gerenciar dados locais como o catálogo de produtos, configurações de interface, rascunhos de descrições gerados por IA e uma fila de sincronização de pedidos para contingência. Embora a plataforma adote o princípio de "Armazenamento Zero" para dados pessoais de compradores nos servidores centrais, a ausência completa de um banco de dados local no dispositivo do vendedor inviabilizaria a usabilidade básica do aplicativo, forçando requisições constantes e lentas a APIs externas para renderizar uma simples lista de produtos.
+O CapybaraCart promete privacidade absoluta para os compradores finais e simplicidade de conformidade legal (LGPD/GDPR) para os vendedores. Para cumprir essa promessa, a plataforma adota uma política estrita de "Armazenamento Zero" de dados de compradores nos servidores do CapybaraCart. No entanto, precisamos processar o checkout (capturar dados de entrega e pagamento) e garantir que o vendedor receba essas informações de forma organizada para despachar o produto físico.
 
 ### Decisão
-Utilizar um banco de dados local relacional e seguro no dispositivo do vendedor (como **SQLite via WebAssembly** ou uma camada robusta sobre **IndexedDB** como o Dexie.js).
+Implementar um fluxo de dados baseado em um **Serverless Proxy de Passagem (Pass-Through)** totalmente stateless (sem estado).
 
-Este banco de dados local será responsável por:
-1. **Catálogo de Produtos:** Armazenar nomes, descrições, preços, estoque e caminhos locais das imagens dos produtos do vendedor.
-2. **Configurações do App:** Preferências de tema, status de validação das chaves e dados de personalização da vitrine.
-3. **Fila de Contingência (Offline Queue):** Armazenar temporariamente os dados de transações aprovadas caso a API do Google Sheets do vendedor falhe ou esteja offline no momento do checkout. Esses dados são sincronizados assim que a conexão ou o serviço for restabelecido.
-4. **Isolamento de Dados de Clientes:** O banco de dados local do vendedor pode registrar o histórico de vendas para sua própria gestão, mas esses dados residem exclusivamente no dispositivo do vendedor e na sua planilha do Google Sheets. **Nenhum dado de comprador é enviado, processado ou armazenado nos servidores centrais do CapybaraCart.**
+O fluxo de dados transacionais funcionará da seguinte forma:
+1. O comprador preenche o formulário de checkout de passo único na vitrine PWA (dados de entrega e pagamento).
+2. O PWA envia uma requisição HTTPS contendo os dados do pedido, os dados do comprador e as chaves de API criptografadas do vendedor para o Serverless Proxy.
+3. O Serverless Proxy recebe a requisição, descriptografa temporariamente as chaves de API do vendedor em memória volátil de execução (RAM) usando a chave de sessão fornecida.
+4. O proxy realiza a chamada para a API do Stripe para processar a cobrança do cartão de crédito.
+5. Após a confirmação de sucesso do Stripe, o proxy realiza imediatamente uma chamada para a API do Google Sheets do vendedor, inserindo uma nova linha com todos os dados do comprador, endereço de entrega, produto comprado e valor pago.
+6. O proxy retorna a resposta de sucesso para o PWA do comprador e encerra sua execução.
+7. Nenhuma informação do comprador, do pedido ou do vendedor é gravada em logs persistentes, discos ou bancos de dados do CapybaraCart. A memória da função serverless é imediatamente liberada pelo provedor de nuvem.
 
 ### Alternativas Consideradas
-*   **Armazenamento Zero Absoluto no Dispositivo (Rejeitado):** Não salvar nada localmente e consultar a API do Google Sheets ou do Stripe para cada renderização de tela do vendedor. Rejeitado por ser extremamente lento, consumir excessivamente a cota de APIs do vendedor, impossibilitar o funcionamento offline e violar a robustez da "Filosofia Fusca".
-*   **Banco de Dados Centralizado na Nuvem (Rejeitado):** Criar um banco de dados centralizado para armazenar os catálogos de todos os vendedores. Rejeitado por gerar custos de infraestrutura para a plataforma e centralizar dados que pertencem soberanamente ao vendedor.
+*   **Armazenamento Temporário em Cache/Redis (Rejeitado):** Salvar os dados do pedido temporariamente em um banco de dados em memória (como Redis) com tempo de expiração (TTL) para posterior sincronização. Rejeitado porque qualquer retenção de dados, mesmo que por segundos, viola o princípio de Armazenamento Zero e adiciona custos de infraestrutura e riscos de conformidade.
+*   **Envio Direto do Client-Side do Comprador (Rejeitado):** Fazer com que o navegador do comprador final se comunique diretamente com a API do Google Sheets do vendedor. Rejeitado porque exigiria expor as credenciais de escrita do Google Sheets do vendedor diretamente no código frontend acessível pelo comprador, criando uma vulnerabilidade grave de segurança.
 
 ### Consequências
 *   **Prós:**
-    *   **Performance Brutal:** Carregamento instantâneo do dashboard do vendedor e do catálogo de produtos, operando de forma offline-first.
-    *   **Resiliência ("Fusca"):** O vendedor pode cadastrar produtos e gerenciar seu estoque mesmo sem conexão com a internet.
-    *   **Privacidade Mantida:** Os dados de vendas e clientes continuam sob posse exclusiva do vendedor, armazenados localmente no seu dispositivo e na sua planilha pessoal.
+    *   **Privacidade por Design:** Conformidade nativa e simplificada com a LGPD/GDPR, pois a plataforma nunca armazena, processa de forma persistente ou retém dados pessoais de compradores.
+    *   **Simplicidade de Infraestrutura:** Sem necessidade de gerenciar, escalar ou proteger bancos de dados relacionais de produção.
+    *   **Soberania do Vendedor:** O vendedor possui controle exclusivo sobre o único banco de dados de seus clientes (sua própria planilha do Google Sheets).
 *   **Contras:**
-    *   **Limitações de Armazenamento do Navegador:** O volume de dados (especialmente imagens de alta resolução) fica limitado pelas cotas de armazenamento local do navegador do dispositivo. O app deve implementar compressão de imagens antes de salvá-las.
-    *   **Sincronização entre Dispositivos:** Se o vendedor acessar o dashboard de um novo dispositivo, ele precisará importar seu catálogo (que pode ser recuperado a partir da planilha do Google Sheets ou de um backup local).
+    *   **Dependência de Sincronização Síncrona:** Se a API do Google Sheets estiver temporariamente indisponível no momento exato do checkout, o sistema precisa de um mecanismo de contingência local no dispositivo do vendedor para evitar a perda do registro do pedido (conforme mapeado no PRD e no Registro de Riscos).
+    *   **Sem Histórico Centralizado:** A plataforma não pode oferecer um painel global de suporte ou recuperação de pedidos para compradores, delegando todo o atendimento pós-venda diretamente ao vendedor.
 
 ---
 
@@ -101,3 +104,66 @@ O proxy funcionará sob as seguintes regras:
 *   **Contras:**
     *   **Cold Starts:** Funções serverless podem apresentar uma latência leve (alguns milissegundos a mais) na primeira requisição após um período de inatividade (inicialização a frio). Esse impacto é minimizado utilizando runtimes leves (Node.js otimizado ou Edge Runtime).
     *   **Limites de Tempo de Execução (Timeout):** Funções serverless possuem limites estritos de tempo de execução (geralmente 10 a 60 segundos). Todas as integrações de API do proxy devem ser otimizadas para responder rapidamente dentro desse limite.
+</dyad-file>
+
+<dyad-write path="board/fase-a/05-adrs.md" description="Atualizando o status do Card 05 para Concluído no board de descoberta">
+# Card 05 — ADRs (Architecture Decision Records)
+
+**Status:** Concluído
+**Depende de:** 04-solution-architecture
+**Tier do projeto:** T3 Robusto
+**Profundidade definida:** T3: ADR completo (contexto, decisão, alternatives consideradas, consequências) para cada decisão arquitetural relevante.
+
+## Objetivo
+Registrar formalmente as decisões arquiteturais mais críticas do CapybaraCart, garantindo rastreabilidade, justificativa técnica e alinhamento com a "Filosofia Fusca" e o modelo BYOK, mapeando as alternativas consideradas e as consequências de cada escolha.
+
+## Contexto essencial
+*   **Modelo BYOK:** O seller traz suas próprias chaves de API. Precisamos decidir onde e como armazenar essas chaves com segurança máxima sem um banco de dados centralizado.
+*   **Armazenamento Zero:** Nenhum dado de comprador é retido nos servidores da plataforma. Precisamos formalizar como os dados de transação fluem diretamente para o Google Sheets do seller.
+*   **Serverless Proxy vs. Client-side Direto:** Decidir se as chamadas de API (Stripe, OpenAI, Google Sheets) serão feitas diretamente pelo navegador do comprador/seller ou se passarão por um proxy serverless leve para evitar problemas de CORS e proteger chaves em trânsito.
+
+## Prompt de execução
+> Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
+
+```markdown
+Você é um Arquiteto de Software Principal com vasta experiência em sistemas distribuídos, segurança de dados e arquiteturas descentralizadas. Seu objetivo é criar o documento de ADRs (Architecture Decision Records) completo para o CapybaraCart.
+
+Use o contexto essencial fornecido abaixo para estruturar o documento. O resultado final deve ser extremamente detalhado, sem placeholders, escrito em português do Brasil.
+
+### Contexto Essencial do CapybaraCart:
+- Filosofia: "Fusca" (simplicidade, robustez, modularidade).
+- Modelo BYOK (Bring Your Own Key) e Armazenamento Zero de dados de compradores.
+- Necessidade de garantir segurança das chaves de API do seller e viabilidade técnica de integrações sem banco de dados central.
+
+### Instruções de Formato e Conteúdo:
+Escreva o documento salvando-o diretamente em `entregaveis/05-adrs.md`. O documento deve conter pelo menos 3 ADRs completos, estruturados no formato padrão de mercado:
+
+1. **ADR-01: Armazenamento Seguro de Chaves de API do Seller (BYOK)**
+   - **Status:** Aprovado
+   - **Contexto:** Onde e como guardar as chaves de API (Stripe, Google Sheets, OpenAI) do seller de forma que ele não precise digitá-las a cada sessão, garantindo segurança contra ataques XSS/CSRF.
+   - **Decisão:** [Defina a decisão técnica, ex: Criptografia local no client-side (AES-GCM) com chave derivada de senha do seller, ou armazenamento em cookies HttpOnly via proxy serverless].
+   - **Alternativas Consideradas:** Banco de dados centralizado (rejeitado por violar o armazenamento zero e aumentar custo/risco); Armazenamento em texto puro no localStorage (rejeitado por risco de XSS).
+   - **Consequências:** [Prós e contras da decisão tomada].
+
+2. **ADR-02: Fluxo de Dados de Compradores (Armazenamento Zero)**
+   - **Status:** Aprovado
+   - **Contexto:** Como processar o checkout e enviar os dados de entrega e pagamento para o Google Sheets do seller sem reter nenhuma informação nos servidores do CapybaraCart.
+   - **Decisão:** [Defina a decisão técnica, ex: Envio direto via Serverless Function que atua como pipeline de passagem (pass-through) e grava diretamente na API do Google Sheets usando a chave do seller].
+   - **Alternativas Consideradas:** Armazenamento temporário em banco de dados Redis com expiração (rejeitado por violar a premissa de armazenamento zero); Envio direto do client-side do comprador (rejeitado por expor a chave do Google Sheets do seller ao comprador).
+   - **Consequências:** [Prós e contras da decisão tomada].
+
+3. **ADR-03: Uso de Serverless Proxy para Chamadas de API de Terceiros**
+   - **Status:** Aprovado
+   - **Contexto:** Como realizar chamadas seguras para as APIs do Stripe, Google Sheets e OpenAI sem expor as chaves de API do seller no frontend do comprador e contornando restrições de CORS.
+   - **Decisão:** [Defina a decisão técnica, ex: Criação de um proxy serverless leve (Edge Functions) que recebe a chave criptografada do client, descriptografa em memória, faz a requisição ao terceiro e retorna o resultado].
+   - **Alternativas Consideradas:** Chamadas diretas do client-side (rejeitado por expor chaves de API e limitações de CORS); Servidor monolítico tradicional (rejeitado por custo e complexidade de escala).
+   - **Consequências:** [Prós e contras da decisão tomada].
+
+Gere um documento técnico maduro, com justificativas arquiteturais sólidas e profundas.
+```
+
+## Critério de conclusão
+1. O arquivo `entregaveis/05-adrs.md` foi criado com os 3 ADRs especificados no prompt de execução.
+2. Cada ADR segue rigorosamente a estrutura: Título, Status, Contexto, Decisão, Alternativas Consideradas e Consequências.
+3. As decisões técnicas estão perfeitamente alinhadas com a "Filosofia Fusca", o modelo BYOK e a política de armazenamento zero.
+4. O documento demonstra maturidade técnica e resolve os principais desafios de segurança e integração do projeto.
