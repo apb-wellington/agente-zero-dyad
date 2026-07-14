@@ -1,6 +1,6 @@
 # Card 02 — PRD (Product Requirement Document)
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 01-product-vision
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: problema, solução, escopo do MVP, fora de escopo, métrica de sucesso, user stories principais, requisitos funcionais numerados, dependências, requisitos não funcionais integrados, matriz de priorização e cenários de erro/exceção mapeados.
@@ -11,7 +11,7 @@ Definir detalhadamente os requisitos funcionais e não funcionais do CapybaraCar
 ## Contexto essencial
 *   **Problema:** Sellers eventuais e colecionadores precisam de um fluxo de checkout simples, sem a burocracia de e-commerces tradicionais e sem o desgaste de negociar manualmente no WhatsApp.
 *   **Solução:** Vitrine e checkout PWA ultra-simples, operando sob o modelo BYOK (Stripe, Google Sheets, OpenAI/Anthropic, APIs de Redes Sociais) e armazenamento zero de dados de compradores localmente.
-*   **Escopo do MVP:** Setup BYOK, cadastro de produtos assistido por IA, assistente de fotos, assistente de posicionamento de marca, geração de vitrine/checkout PWA, integração com Google Sheets para pedidos, integração com Stripe para pagamentos, integração com Mercado Envios para frete, e assistente de publicação social.
+*   **Escopo do MVP:** Setup BYOK, cadastro de produtos assistido por IA, assistente de fotos, assistente de posicionamento de marca, geração de vitrine/checkout PWA, integração com Google Sheets para pedidos, integração com Stripe para pagamentos, integration com Mercado Envios para frete, e assistente de publicação social.
 
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
