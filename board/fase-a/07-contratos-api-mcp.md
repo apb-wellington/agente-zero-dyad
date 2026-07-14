@@ -1,6 +1,6 @@
 # Card 07 — Contratos de API/MCP
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 04-solution-architecture
 **Tier do projeto:** T3 Robusto (Profundidade: Integrações 3)
 **Profundidade definida:** Integrações 3: contrato por integração (request/response, auth, rate limits) + estratégia de versionamento e tratamento de indisponibilidade de terceiros.
