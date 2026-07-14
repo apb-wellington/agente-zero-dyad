@@ -12,7 +12,7 @@ A Inteligência Artificial no CapybaraCart atua como um copiloto de usabilidade 
 
 1.  **Assistente de Setup e Posicionamento de Marca:**
     *   *Papel:* Conduzir um breve questionário interativo com o seller para extrair a essência do seu negócio (ex: nicho, valores, diferencial).
-    *   *Saída:* Um perfil de marca estruturado in JSON contendo: Tom de Voz (ex: acolhedor, técnico, minimalista), Proposta de Valor e Palavras-chave. Este JSON é salvo no perfil do seller e serve de contexto para os demais assistentes.
+    *   *Saída:* Um perfil de marca estruturado em JSON contendo: Tom de Voz (ex: acolhedor, técnico, minimalista), Proposta de Valor e Palavras-chave. Este JSON é salvo no perfil do seller e serve de contexto para os demais assistentes.
 2.  **Assistente de Cadastro de Produtos:**
     *   *Papel:* Entrevistar o seller de forma conversacional para extrair as características do produto (foco no 80/20 do marketing: história, estado de conservação, raridade).
     *   *Saída:* Título persuasivo e descrição estruturada otimizada para conversão, sem inventar dados técnicos ou comerciais.
@@ -35,7 +35,7 @@ Para manter o consumo de tokens baixo (essencial no modelo BYOK) e garantir alta
 
 Para viabilizar o modelo BYOK de forma prática e inclusiva, o sistema suportará três provedores principais, com destaque para a opção gratuita de entrada:
 
-*   **gemini-1.5-flash (Recomendação Principal de Entrada - Google AI Studio):**
+*   **gemini-flash-latest (Recomendação Principal de Entrada - Google AI Studio):**
     *   *Por que usar:* É a escolha ideal para sellers iniciantes ou não entusiastas. O Google AI Studio oferece um **free tier extremamente generoso** (até 15 requisições por minuto e 1.500 por dia gratuitamente). Além disso, possui excelente velocidade, suporte nativo a JSON Schema e capacidades multimodais nativas excelentes para o Assistente de Fotos.
 *   **gpt-4o-mini (Alternativa Paga de Baixo Custo - OpenAI):**
     *   *Por que usar:* Excelente velocidade, custo de tokens pagos extremamente baixo e suporte nativo a saídas estruturadas complexas.
