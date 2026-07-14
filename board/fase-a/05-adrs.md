@@ -1,6 +1,6 @@
 # Card 05 — ADRs (Architecture Decision Records)
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 04-solution-architecture
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: ADR completo (contexto, decisão, alternativas consideradas, consequências) para cada decisão arquitetural relevante.
