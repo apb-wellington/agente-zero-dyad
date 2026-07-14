@@ -1,6 +1,6 @@
 # Card 03-02 — Journey Map
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 03-01-personas-jtbd
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: jornada completa com pontos de dor, emoções, e oportunidades por etapa.
