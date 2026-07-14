@@ -12,7 +12,7 @@ A Inteligência Artificial no CapybaraCart atua como um copiloto de usabilidade 
 
 1.  **Assistente de Setup e Posicionamento de Marca:**
     *   *Papel:* Conduzir um breve questionário interativo com o seller para extrair a essência do seu negócio (ex: nicho, valores, diferencial).
-    *   *Saída:* Um perfil de marca estruturado em JSON contendo: Tom de Voz (ex: acolhedor, técnico, minimalista), Proposta de Valor e Palavras-chave. Este JSON é salvo no perfil do seller e serve de contexto para os demais assistentes.
+    *   *Saída:* Um perfil de marca estruturado in JSON contendo: Tom de Voz (ex: acolhedor, técnico, minimalista), Proposta de Valor e Palavras-chave. Este JSON é salvo no perfil do seller e serve de contexto para os demais assistentes.
 2.  **Assistente de Cadastro de Produtos:**
     *   *Papel:* Entrevistar o seller de forma conversacional para extrair as características do produto (foco no 80/20 do marketing: história, estado de conservação, raridade).
     *   *Saída:* Título persuasivo e descrição estruturada otimizada para conversão, sem inventar dados técnicos ou comerciais.
@@ -33,10 +33,14 @@ Para manter o consumo de tokens baixo (essencial no modelo BYOK) e garantir alta
 
 ### 1.3 Modelos Recomendados
 
-Para equilibrar custo-benefício, velocidade e capacidade cognitiva sob o modelo BYOK, o sistema suportará:
+Para viabilizar o modelo BYOK de forma prática e inclusiva, o sistema suportará três provedores principais, com destaque para a opção gratuita de entrada:
 
-*   **gpt-4o-mini (Padrão OpenAI):** Excelente velocidade, custo de tokens extremamente baixo e suporte nativo a saídas estruturadas complexas. Recomendado para todos os assistentes.
-*   **claude-3-5-haiku (Alternativa Anthropic):** Excepcional capacidade de escrita criativa e tom de voz natural. Recomendado como alternativa de alta qualidade para o Assistente de Cadastro e Publicação Social.
+*   **gemini-1.5-flash (Recomendação Principal de Entrada - Google AI Studio):**
+    *   *Por que usar:* É a escolha ideal para sellers iniciantes ou não entusiastas. O Google AI Studio oferece um **free tier extremamente generoso** (até 15 requisições por minuto e 1.500 por dia gratuitamente). Além disso, possui excelente velocidade, suporte nativo a JSON Schema e capacidades multimodais nativas excelentes para o Assistente de Fotos.
+*   **gpt-4o-mini (Alternativa Paga de Baixo Custo - OpenAI):**
+    *   *Por que usar:* Excelente velocidade, custo de tokens pagos extremamente baixo e suporte nativo a saídas estruturadas complexas.
+*   **claude-3-5-haiku (Alternativa Premium de Escrita - Anthropic):**
+    *   *Por que usar:* Excepcional capacidade de escrita criativa e tom de voz natural. Recomendado para sellers que buscam copys altamente refinadas e personalizadas.
 
 ---
 
@@ -46,8 +50,8 @@ Operar em um ambiente BYOK exige que o sistema seja altamente resiliente a falha
 
 | Modo de Falha | Causa Raiz | Comportamento do Sistema (Mitigação) | Experiência do Usuário (UX) |
 |---|---|---|---|
-| **Chave Inválida ou Sem Saldo** | Chave incorreta, revogada ou conta do usuário sem créditos na OpenAI/Anthropic. | O Serverless Proxy captura o erro HTTP `401 Unauthorized` ou `403 Forbidden` retornado pela API do provedor. | Exibe um alerta amigável no painel: *"Ops! Sua chave de IA parece estar sem saldo ou incorreta. Clique aqui para verificar suas configurações de API."* com link direto para o setup. |
-| **Rate Limit / Quota Excedida** | O usuário atingiu o limite de requisições por minuto (RPM) ou tokens por minuto (TPM) do seu tier de conta. | O proxy captura o erro HTTP `429 Too Many Requests` e aplica uma estratégia de retry com backoff exponencial (máximo 3 tentativas). | Se persistir, exibe: *"O assistente de IA está um pouco sobrecarregado agora. Aguarde alguns segundos ou digite os dados manualmente."* |
+| **Chave Inválida ou Sem Saldo** | Chave incorreta, revogada ou conta do usuário sem créditos (OpenAI/Anthropic) ou fora do ar. | O Serverless Proxy captura o erro HTTP `401 Unauthorized` ou `403 Forbidden` retornado pela API do provedor. | Exibe um alerta amigável no painel: *"Ops! Sua chave de IA parece estar sem saldo ou incorreta. Clique aqui para verificar suas configurações de API."* com link direto para o setup. |
+| **Rate Limit / Quota Excedida** | O usuário atingiu o limite de requisições por minuto (RPM) ou tokens por minuto (TPM) do seu tier de conta (comum no free tier do Gemini se houver cliques muito rápidos). | O proxy captura o erro HTTP `429 Too Many Requests` e aplica uma estratégia de retry com backoff exponencial (máximo 3 tentativas). | Se persistir, exibe: *"O assistente de IA está um pouco sobrecarregado agora. Aguarde alguns segundos ou digite os dados manualmente."* |
 | **Timeout de Requisição** | Lentidão na API do provedor ou conexão instável do usuário. | O frontend define um limite estrito de 15 segundos para a requisição. Se estourar, cancela a chamada. | Exibe um loader com opção de cancelamento e, se falhar, sugere: *"A IA demorou para responder. Deseja tentar novamente ou preencher manualmente?"* |
 | **Alucinação de Dados Críticos** | O modelo inventa preços, estoque ou dimensões físicas não fornecidas pelo usuário. | Engenharia de prompt defensiva com restrições negativas absolutas e validação de esquema JSON no recebimento. | O sistema bloqueia a inserção automática de dados numéricos sensíveis (preço/estoque) gerados pela IA, exigindo que o seller os digite em campos separados e validados. |
 
