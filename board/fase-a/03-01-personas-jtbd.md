@@ -1,6 +1,6 @@
 # Card 03-01 — Personas / JTBD
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 02-prd
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: personas primárias + secundárias, JTBD completo (funcional, emocional, social) por persona.
@@ -46,7 +46,7 @@ Escreva o documento salvando-o diretamente em `entregaveis/03-01-personas-jtbd.m
      - **Job Social:** Como o usuário quer ser percebido pelos outros.
 
 4. **Implicações para o Produto:**
-   - Traduza as dores e os Jobs mapeados em diretrizes claras de design e funcionalidade para o CapybaraCart (ex: "Como o Job Emocional do hobbista é evitar o desgaste da barganha, o fluxo de checkout deve ser totalmente autônomo e definitivo").
+   - Traduza as dores e os Jobs mapeados in diretrizes claras de design e funcionalidade para o CapybaraCart (ex: "Como o Job Emocional do hobbista é evitar o desgaste da barganha, o fluxo de checkout deve ser totalmente autônomo e definitivo").
 
 Gere um documento profundo, empático e diretamente acionável para o time de design e desenvolvimento.
 ```
