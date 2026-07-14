@@ -1,6 +1,6 @@
 # Card 08 — Wireframes
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 02-prd, 03-02-journey-map
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: wireframes de baixa fidelidade das telas principais (fluxo crítico), telas secundárias e estados alternativos (vazio, erro, carregando).
