@@ -1,6 +1,6 @@
 # Card 12 — Roadmap/MVP scope (MoSCoW)
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 02-prd
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: MoSCoW completo (Must/Should/Could/Won't) + fases e marcos temporais aproximados.
