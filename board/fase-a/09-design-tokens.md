@@ -1,6 +1,6 @@
 # Card 09 — Design Tokens
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 08-wireframes
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: paleta, tipografia, espaçamento e estados base — o essencial para consistência, sem sistema de design completo.
