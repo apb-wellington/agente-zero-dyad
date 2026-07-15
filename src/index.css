@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Estilo de foco de acessibilidade de alto contraste (anel duplo) */
+  :focus-visible {
+    outline: none;
+    @apply ring-2 ring-offset-2 ring-brand-primary;
+  }
+}
