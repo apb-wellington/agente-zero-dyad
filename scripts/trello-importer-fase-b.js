@@ -61,7 +61,7 @@ Gere o código limpo, modular, sem placeholders e pronto para produção.
 2. O arquivo \`tailwind.config.js\` contém a escala exata de cores, tipografia e espaçamentos especificados.
 3. O roteamento entre as 4 páginas principais está funcional (renderizando os componentes esqueleto).
 4. O manifesto do PWA é gerado corretamente e o Service Worker é registrado com sucesso no navegador.
-5. Os estados de foco de acessibilidade estão implementados nos elements interativos base.
+5. Os estados de foco de acessibilidade estão implementados nos elementos interativos base.
 
 # Card 02 — Setup BYOK & Secure Vault
 
@@ -82,7 +82,7 @@ Implementar o fluxo de autenticação do vendedor (Google OAuth 2.0) e a interfa
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
 
-\`\`\`markdown
+```markdown
 Você é um Engenheiro de Segurança e Desenvolvedor Backend sênior. Seu objetivo é implementar o fluxo de autenticação do vendedor e o cofre seguro de chaves (Secure Vault) para o CapybaraCart.
 
 ### Diretrizes de Implementação:
@@ -102,7 +102,7 @@ Você é um Engenheiro de Segurança e Desenvolvedor Backend sênior. Seu objeti
    - As chaves privadas (Stripe Secret Key, OpenAI API Key) devem ser criptografadas em repouso utilizando AES-256-GCM antes de serem salvas no banco de dados, atrelando a chave de descriptografia ao ID do usuário autenticado.
 
 Gere um código limpo, seguro, com tratamento de erros robusto e em conformidade com a LGPD.
-\`\`\`
+```
 
 ## Critério de aceite
 1. O login via Google OAuth 2.0 está funcional e redireciona o usuário corretamente.
@@ -131,7 +131,7 @@ Construir a interface do painel de controle do vendedor (Dashboard), exibindo a 
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
 
-\`\`\`markdown
+```markdown
 Você é um Engenheiro Frontend Sênior com foco em UX/UI e usabilidade. Seu objetivo é construir a página de Dashboard do Seller (\`/dashboard\`) para o CapybaraCart.
 
 ### Diretrizes de Implementação:
@@ -148,7 +148,7 @@ Você é um Engenheiro Frontend Sênior com foco em UX/UI e usabilidade. Seu obj
    - Garanta que a página exiba skeletons de carregamento enquanto os dados são buscados.
 
 Utilize os Design Tokens de cores, tipografia e espaçamento configurados no Tailwind CSS. Gere um código limpo, modular e acessível.
-\`\`\`
+```
 
 ## Critério de aceite
 1. A rota \`/dashboard\` renderiza a listagem de produtos corretamente para usuários autenticados.
@@ -174,7 +174,7 @@ Implementar a interface de cadastro de produtos (\`/produtos/novo\`) integrada a
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
 
-\`\`\`markdown
+```markdown
 Você é um Engenheiro Frontend e especialista em Engenharia de Prompt. Seu objetivo é implementar a página de Cadastro de Produtos (\`/produtos/novo\`) integrada ao Assistente de IA do CapybaraCart.
 
 ### Diretrizes de Implementação:
@@ -193,7 +193,7 @@ Você é um Engenheiro Frontend e especialista em Engenharia de Prompt. Seu obje
    - Se a API de IA falhar (timeout, chave sem saldo ou rate limit), exiba uma mensagem amigável e garanta que o formulário manual continue 100% funcional.
 
 Gere um código limpo, modular, com excelente usabilidade e feedbacks visuais de carregamento.
-\`\`\`
+```
 
 ## Critério de aceite
 1. A rota \`/produtos/novo\` renderiza o formulário e o painel de chat lateral corretamente.
@@ -220,7 +220,7 @@ Construir a página pública do produto (\`/p/:id\`) otimizada para dispositivos
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
 
-\`\`\`markdown
+```markdown
 Você é um Engenheiro Frontend Sênior especialista em Checkout, Conversão e Integração com Gateways de Pagamento. Seu objetivo é construir a página pública do produto e o checkout de passo único (\`/p/:id\`) do CapybaraCart.
 
 ### Diretrizes de Implementação:
@@ -241,7 +241,7 @@ Você é um Engenheiro Frontend Sênior especialista em Checkout, Conversão e I
    - Se falhar, exiba mensagens de erro amigáveis e claras (ex: saldo insuficiente, cartão recusado) sem expor logs técnicos.
 
 Gere um código limpo, performático, com excelente usabilidade e acessibilidade WCAG AA.
-\`\`\`
+```
 
 ## Critério de aceite
 1. A rota pública \`/p/:id\` renderiza as informações do produto corretamente a partir do ID.
@@ -266,7 +266,7 @@ Implementar o Serverless Proxy (Vercel/Netlify Functions) stateless que atua com
 ## Prompt de execução
 > Copie o bloco abaixo para um chat NOVO do Dyad, em Build mode.
 
-\`\`\`markdown
+```markdown
 Você é um Engenheiro de Integrações e Desenvolvedor Backend sênior, especialista em arquiteturas serverless e segurança de dados. Seu objetivo é implementar o Serverless Proxy e a integração com o Google Sheets para o CapybaraCart.
 
 ### Diretrizes de Implementação:
@@ -284,7 +284,7 @@ Você é um Engenheiro de Integrações e Desenvolvedor Backend sênior, especia
    - Se a gravação no Google Sheets falhar (timeout, planilha cheia ou erro de permissão), capture o erro, confirme o sucesso do pagamento para o comprador e retorne o payload do pedido criptografado com uma flag \`pending_sync: true\` para que o PWA salve no IndexedDB do vendedor.
 
 Gere um código limpo, performático, sem persistência de dados de compradores e com tratamento de erros robusto.
-\`\`\`
+```
 
 ## Critério de aceite
 1. A Serverless Function \`api/checkout\` está criada e responde corretamente a requisições POST.
@@ -339,7 +339,7 @@ Gere um código limpo, modular, com excelente usabilidade e focado em performanc
 3. A integração com a IA gera copys formatadas especificamente para Instagram, Pinterest e TikTok.
 4. A funcionalidade de cópia rápida de texto e compartilhamento direto via Web Share API funciona perfeitamente.
 5. A interface é responsiva e segue os Design Tokens de estilo e acessibilidade.
-\`;
+`;
 
 // ==============================================================================
 // 3. MOTOR DO SCRIPT - NÃO É NECESSÁRIO ALTERAR
