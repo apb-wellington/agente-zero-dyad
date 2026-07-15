@@ -1,6 +1,6 @@
 # Card 10 — NFRs + modelo de custo
 
-**Status:** A fazer
+**Status:** Concluído
 **Depende de:** 04-solution-architecture
 **Tier do projeto:** T3 Robusto
 **Profundidade definida:** T3: NFRs completos (performance, disponibilidade, segurança, privacidade) + modelo de custo detalhado por componente.
