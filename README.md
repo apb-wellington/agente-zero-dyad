@@ -62,6 +62,24 @@ complexidade do projeto:
 - **complexidade maior** → `board/fase-b/*.md`, cards de construção
   seguindo a mesma lógica de dosagem por tier da Fase A.
 
+## Transição para a Construção (Handoff e Código Real)
+
+Este repositório é estritamente **doc-as-code** (especificação e planejamento). O código real do seu aplicativo **não deve** ser escrito aqui para evitar poluição e conflitos de contexto. 
+
+Para iniciar a construção do app real utilizando os cards gerados na Fase B:
+
+1. **Crie um novo repositório no GitHub** exclusivo para o código do seu aplicativo (ex: `nome-do-projeto-app`).
+2. **Copie a pasta `entregaveis/`** deste repositório de descoberta e cole-a na raiz do seu novo repositório de código. Faça o commit e push. Isso garante que a especificação técnica esteja fisicamente acessível no ambiente de construção.
+3. **Importe o novo repositório de código no Dyad**.
+4. **Execute os cards da Fase B** (que estão em `board/fase-b/` deste repositório de descoberta):
+   * Abra o card correspondente na pasta `board/fase-b/`.
+   * Copie o **"Prompt de execução"** do card.
+   * Cole o prompt no chat do Dyad do **novo repositório de código** (em Build Mode).
+5. **Dica de Contexto para a IA de Construção:** Ao colar o prompt de execução de qualquer card da Fase B no novo repositório, adicione a seguinte instrução no início ou fim da mensagem para garantir que a IA leia os documentos de especificação locais:
+   > *"Utilize como contexto e especificação técnica os arquivos contidos na pasta `entregaveis/` deste repositório (especialmente o PRD e a Solution Architecture) para guiar a implementação técnica."*
+
+---
+
 ## Dúvidas durante a execução de um card
 
 Não existe chat de acompanhamento contínuo. Toda vez que surgir dúvida
@@ -147,4 +165,4 @@ Regras:
 
 Ver `ASSUMPTIONS.md`. Nenhuma parte deste sistema foi testada num Dyad
 real antes desta entrega — as suposições estão documentadas como nota
-informativa, não como bloqueio.
+informativa, não como bloco.
